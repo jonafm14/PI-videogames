@@ -37,7 +37,7 @@ export default function NavBar () {
               ></input>
     
               <button
-                className={Style.buttonSubmit}
+                className={Style.button}
                 type="submit"
                 onClick={e => handleSubmit(e)}
               >

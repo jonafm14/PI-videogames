@@ -1,21 +1,45 @@
-.divCard{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+*{
+  margin: 0;
+}
+.divCard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
-.containerHome {
-    background: rgb(131,58,180);
-background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+body {
+  background-image: url("../../multimedia/FondoHome.png");
 }
 
-.containerButtons{
-    display: flex;
-    justify-content: space-around;
+
+.containerButtons {
+  display: flex;
+  justify-content: space-around;
 }
 
-.containerButtons select{
-    width: 120px;
-    text-align: center;
-    
+.button {
+  background: #ffffff;
+  font-family: inherit;
+  padding: 0.6em 1.3em;
+  font-weight: 900;
+  font-size: 18px;
+  border: 3px solid black;
+  box-shadow: 0.1em 0.1em;
+  cursor: pointer;
+}
+
+.button:hover {
+  transform: translate(-0.05em, -0.05em);
+  box-shadow: 0.15em 0.15em;
+}
+
+.button:active {
+  transform: translate(0.05em, 0.05em);
+  box-shadow: 0.05em 0.05em;
+}
+
+a {
+  
+  text-decoration: none;
+  color: black;
 }

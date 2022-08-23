@@ -82,9 +82,14 @@ router.get('/', async (req, res) => {
 
 
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
     const {id, name, image, description, released, rating, genres, platforms} = req.body
-
+    let exists = await Videogame.findOne({
+        where: {name},
+    });
+    if(exists){
+        return res.status(400).send("That videogame already exist")
+    }
     try {
         let newGame = await Videogame.create({
             id,
@@ -103,7 +108,7 @@ router.post('/', async (req, res) => {
         newGame.addGenres(findGenres)
         res.send("Game successfully created!")
     } catch (e) {
-        console.log(e)
+        next(e)
     }
 })
 

@@ -80,12 +80,13 @@ export const createGame = (payload) => {
     return async (dispatch) => {
         try {
             const json = await axios.post(`http://localhost:3001/videogames`,payload)
+            alert("Videogame created successfully");
             return dispatch({
                 type: "CREATE_GAME",
                 payload: json.data
             })
         } catch (e) {
-            console.log(e)
+            alert("That videogame already exists")
         }
     }
 }
@@ -111,9 +112,10 @@ export const byRatingFilter = (payload) => {
     }
 }
 
-export const byGenresFilter = (payload) => {
+export function byGenresFilter(payload) {
     return {
-        type: "BY_GENRES_FILTER",
+        type: "FILTER_BY_GENRE",
         payload
     }
 }
+

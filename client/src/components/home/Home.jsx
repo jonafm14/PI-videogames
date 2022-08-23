@@ -66,7 +66,6 @@ export default function Home() {
   function handleSortGenres(e) {
     e.preventDefault();
     dispatch(byGenresFilter(e.target.value));
-    setCurrentPage(1);
     setOrder(`Order ${e.target.value}`);
   }
 
@@ -75,27 +74,43 @@ export default function Home() {
       <div>
         <NavBar />
         <div className={Style.containerButtons}>
-          <button className={Style.btn} onClick={handleClick}>
+          <button className={Style.button} onClick={handleClick}>
             Reload
           </button>
-          <select onChange={(e) => handleSort(e)}>
+          <select className={Style.button} onChange={(e) => handleSort(e)}>
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </select>
-          <select onChange={(e) => handleSortRating(e)}>
+          <select
+            className={Style.button}
+            onChange={(e) => handleSortRating(e)}
+          >
             <option value="higher">Lower Rating</option>
             <option value="lower">Higher Rating</option>
           </select>
-          <select onChange={(e) => handleCreatedFilter(e)}>
-            <option value="All">All</option>
+          <select
+            className={Style.button}
+            onChange={(e) => handleCreatedFilter(e)}
+          >
+            <option value="all">All</option>
             <option value="created">Created</option>
             <option value="api">Api</option>
           </select>
-          <select onChange={(e) => handleSortGenres(e)}>
-            {genres.map((g) => (
-              <option value={g.name}>{g.name}</option>
-            ))}
+          <select
+            className={Style.button}
+            onChange={e => handleSortGenres(e)}
+          >
+            <option value = 'all'>All</option>
+            {
+            genres?.map((g) => (
+              <option value={g.name} key={g.name}>{g.name.charAt(0).toUpperCase()+g.name.slice(1)} </option>
+            ))
+            }
+            
           </select>
+          <button className={Style.button}>
+            <Link to={"/form/"}>Form</Link>
+          </button>
         </div>
       </div>
       <div className={Style.divCard}>
@@ -114,7 +129,7 @@ export default function Home() {
           );
         })}
       </div>
-      <div>
+      <div className={Style.containerPaginated}>
         <Paginated
           gamesPage={gamesPage}
           gamesState={gamesState.length}
