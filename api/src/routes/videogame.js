@@ -1,48 +1,90 @@
-const { Router} = require('express');
-const axios = require("axios");
-const {Videogame, Genres} = require('../db.js');
-require('dotenv').config();
-const {API_KEY} = process.env;
+const { Router } = require("express");
+const { Videogame, Genres } = require("../db");
 const router = Router();
+const { API_KEY } = process.env;
+const axios = require("axios");
 
+//https://api.rawg.io/api/games/{id}
 
+router.get("/:id", async (req, res) => {
+    const { id } = req.params
+    let detail;
+  
+    if (id.includes("-")) {
+      // este if es para encontrar los games que ya estan creados
+      try {
+        detail = await Videogame.findOne({
+          where: {
+            id: id,
+          },
+          include: {
+            model: Genres,
+            attributes: ["name"],
+          },
+        });
+        
+      } catch (e) {
+        console.log("Error en el primer entry", e);
+      }
+    } else {
+      // si el apk no incluye "-"
+      try {
+        const response = await axios.get(
+          `https://api.rawg.io/api/games/${id}?key=${ API_KEY }`
+        );
+        const elem = response.data;
+        detail = {
+          id: elem.id,
+          name: elem.name,
+          description: elem.description_raw,
+          image: elem.background_image,
+          rating: elem.rating,
+          released: elem.released,
+          genres: elem.genres,
+          platforms: elem.platforms.map((p) => p.platform.name).join(","),
+        };
 
-router.get('/:idVideogame', async (req, res)  => {
-    const { idVideogame } = req.params                 
-
-    if (idVideogame.includes('-')) {                    //con includes pregunto si el id tiene un "-" porque el id que se genera utilizando UUID tiene separaciones con guiones, por lo que se veria algo parecido a esto: (a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11)
-        let vdb = await Videogame.findOne({
-            where: {
-                id: idVideogame                         //Busco si es un juego creado anteriormente y traigo la data de la db
-            },
-            include: Genres
-        })
-
-        vdb = JSON.stringify(vdb)
-        vdb  = JSON.parse(vdb)                          //Lo parseo
-
-        vdb.genres = vdb.genres.map(g => g.name)        //Mapeo los generos para quedarme solamente con el nombre
-        res.json(vdb)                                   //Lo devuelvo
-    } else {                                            //Si no es un juego que se haya creado se busca de la api
-        try {
-            const api = await axios.get(`https://api.rawg.io/api/games/${idVideogame}?key=${API_KEY}`);
-            let {id, name, background_image, genres, description, released: releaseDate, rating, platforms} = api.data
-            genres = genres.map (g => g.name)
-            platforms = platforms.map (p => p.platform.name)         //Mapeo genero y plataforma para quedarme con el nombre (vienen como array de objetos)
-            return res.json({
-                id,
-                name,
-                background_image,
-                genres,
-                description,                            //Lo devuelvo
-                releaseDate,
-                rating,
-                platforms
-            })
-        } catch (e) {
-            return console.log(e)
-        }
+      } catch (e) {
+        console.log("Error en el segundo entry", e);
+      }
     }
+    if (detail) {
+      res.send(detail);
+    } else {
+      res.status(404).send("No anda");
+    }
+  });
+
+router.post('/', async (req , res) => {
+    try{const {   // lo que reciben por body osea por formulario. 
+        name,
+        image,
+        genres,
+        description,
+        released,
+        rating,
+        platforms,
+        createdInDb,
+    } = req.body
+    
+
+    const createVideoGame = await Videogame.create({ //creo el personaje desde la base db
+        name,
+        image,
+        description,
+        released,
+        rating,
+        platforms,
+        createdInDb
+    })
+    const searchGenre = await Genres.findAll({ //me traigo los generos y luego comparo por nombre. El correcto lo agrego abajo con el "AddGenre()"
+        where: {name: genres},
+    });
+    createVideoGame.addGenre(searchGenre)
+    res.send("Videogame created successfully")
+  }catch(e){
+    console.log(e)
+  }
 })
 
 

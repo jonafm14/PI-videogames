@@ -14,15 +14,23 @@ const initialState = {
   gameDetails: [],
   idGame: [],
   allGamesCopy: [],
+  platforms: [],
 };
 
 function rootReducer(state = initialState, action) {
   switch (action.type) {
     case GET_ALL_GAMES:
+      let platforms = [];
+
+      action.payload.forEach(game => {
+        platforms = [...platforms, ...game.platforms]
+      });
+      // console.log(platforms)
       return {
         ...state,
         allGames: action.payload,
         allGamesCopy: action.payload,
+        platforms: Array.from(new Set(platforms)),
       };
     case GET_GAME_BY_ID:
       return {

@@ -9,7 +9,7 @@ export const GET_GAME_DETAILS = 'GET_GAME_DETAILS'
 export function getAllGames() {
     return async function (dispatch) {
         try {
-            var json = await axios.get("http://localhost:3001/videogames")
+            const json = await axios.get("http://localhost:3001/videogames")
             return dispatch({
                 type: "GET_ALL_GAMES",
                 payload: json.data
@@ -51,21 +51,35 @@ export const getGameByName = (name) => {
 export const getAllGenres = () => {
     return async (dispatch) => {
         try {
-            const json = await axios.get("http://localhost:3001/genres")
+            const json  = await axios.get("http://localhost:3001/genres")
             return dispatch({
                 type: "GET_ALL_GENRES",
                 payload: json.data
             })
         } catch (e) {
-            return (e)
+            console.log(e)
         }
     }
 }
+
+// export function getGenre(){
+//     return function (dispatch){
+//         axios.get("http://localhost:3001/genres")
+//         .then((generos) => {
+//             return dispatch ({
+//                 type: GET_GENRE,
+//                 payload: generos.data
+//             });
+//         })
+//         .catch((error) => console.log(error))
+//     }
+// }
 
 export const getGameDetails = (id) => {
     return async (dispatch) => {
         try {
             const json = await axios.get(`http://localhost:3001/videogame/${id}`)
+            
             return dispatch({
                 type: "GET_GAME_DETAILS",
                 payload: json.data
@@ -79,14 +93,14 @@ export const getGameDetails = (id) => {
 export const createGame = (payload) => {
     return async (dispatch) => {
         try {
-            const json = await axios.post(`http://localhost:3001/videogames`,payload)
-            alert("Videogame created successfully");
+            const json = await axios.post(`http://localhost:3001/videogame`,payload)
+            console.log("JSON", json)
             return dispatch({
                 type: "CREATE_GAME",
                 payload: json.data
             })
         } catch (e) {
-            alert("That videogame already exists")
+            console.log(e)
         }
     }
 }
