@@ -23,7 +23,7 @@ export function getAllGames() {
 export const getGameById = (id) => {
     return async (dispatch) => {
         try {
-            const json = await axios.get(`http://localhost:3001/videogame/${id}`)
+            const json = await axios.get(`http://localhost:3001/videogames/${id}`)
             return dispatch({
                 type: "GET_GAME_BY_ID",
                 payload: json.data
@@ -78,7 +78,7 @@ export const getAllGenres = () => {
 export const getGameDetails = (id) => {
     return async (dispatch) => {
         try {
-            const json = await axios.get(`http://localhost:3001/videogame/${id}`)
+            const json = await axios.get(`http://localhost:3001/videogames/${id}`)
             
             return dispatch({
                 type: "GET_GAME_DETAILS",
@@ -93,7 +93,7 @@ export const getGameDetails = (id) => {
 export const createGame = (payload) => {
     return async (dispatch) => {
         try {
-            const json = await axios.post(`http://localhost:3001/videogame`,payload)
+            const json = await axios.post(`http://localhost:3001/videogames`,payload)
             console.log("JSON", json)
             return dispatch({
                 type: "CREATE_GAME",

@@ -109,13 +109,14 @@ export default function Form() {
     !game.image
       ? setGame({
           ...(game.image =
-            "https://agencias.assist1.com.co/assets/images/no-image.png"),
+            "https://previews.123rf.com/images/mattbadal/mattbadal2012/mattbadal201200056/161901103-sin-vector-de-icono-de-imagen-no-hay-s%C3%ADmbolo-de-imagen-disponible-adecuado-para-el-elemento-de-inter.jpg?fj=1"),
         })
       : setGame(game);
     setGame({ ...(game.name = game.name.toLowerCase()) });
     let noRepeat = allNames.filter((n) => n.name === game.name);
     if (noRepeat.length !== 0) {
       alert("That videogame already exists");
+      window.location.reload();
     } else {
       setErrorsForm(validate(game));
       dispatch(createGame(game));
@@ -128,7 +129,7 @@ export default function Form() {
         genres: [],
         platforms: [],
       });
-      alert("the game was created successfully");
+      alert("Videogame created successfully");
     }
     // navigate("/home");
   }
@@ -149,6 +150,7 @@ export default function Form() {
           <div className={Style.form}>
             <label>Name</label>
             <input
+              className={Style.input}
               type="text"
               placeholder="Enter a name..."
               name="name"
@@ -178,6 +180,7 @@ export default function Form() {
             )}
             <label>Released</label>
             <input
+              className={Style.input}
               type="date"
               name="released"
               placeholder="yyyy-mm-dd"
@@ -193,6 +196,7 @@ export default function Form() {
             )}
             <label>Image</label>
             <input
+              className={Style.input}
               type="text"
               placeholder="Enter a URL"
               name="image"
@@ -208,6 +212,7 @@ export default function Form() {
             )}
             <label>Rating</label>
             <input
+              className={Style.input}
               name="rating"
               placeholder="Enter a rating 0 - 5"
               value={game.rating}
@@ -271,18 +276,6 @@ export default function Form() {
                 </div>
               ))}
             </div>
-            {/* <label>Platforms</label>
-            <select
-              name="platforms"
-              value={game.platforms}
-              onChange={handlePlatforms}
-            >
-              <option value={1}>PC</option>
-              <option value={2}>Android</option>
-              <option value={3}>PlayStation 5</option>
-              <option value={4}>XBOX</option>
-              <option value={5}>iOS</option>
-            </select> */}
             <div className={Style.buttonFrom}>
               <button className={Style.button} type="submit">
                 CREATE
