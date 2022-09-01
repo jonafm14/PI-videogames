@@ -9,6 +9,7 @@ import {
   byRatingFilter,
   byGenresFilter,
   getAllGenres,
+  byPlatformsFilter,
 } from "../../redux/actions";
 import Card from "../card/Card";
 import NavBar from "../navBar/NavBar";
@@ -19,6 +20,8 @@ export default function Home() {
   const dispatch = useDispatch();
   const gamesState = useSelector((state) => state.allGames);
   const genres = useSelector((state) => state.genres);
+  const platforms = useSelector((state) => state.platforms);
+
   const [, setOrder] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [gamesPage, setGamePage] = useState(15);
@@ -28,9 +31,6 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(getAllGames());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(getAllGenres());
   }, [dispatch]);
 
@@ -66,6 +66,14 @@ export default function Home() {
   function handleSortGenres(e) {
     e.preventDefault();
     dispatch(byGenresFilter(e.target.value));
+    setCurrentPage(1);
+    setOrder(`Order ${e.target.value}`);
+  }
+
+  function handleSortPlatforms(e) {
+    e.preventDefault();
+    dispatch(byPlatformsFilter(e.target.value));
+    setCurrentPage(1);
     setOrder(`Order ${e.target.value}`);
   }
 
@@ -96,18 +104,31 @@ export default function Home() {
             <option value="created">Created</option>
             <option value="api">Api</option>
           </select>
+
           <select
             className={Style.button}
-            onChange={e => handleSortGenres(e)}
+            onChange={(e) => handleSortGenres(e)}
           >
-            <option value = 'all'>All</option>
-            {
-            genres?.map((g) => (
-              <option value={g.name} key={g.name}>{g.name.charAt(0).toUpperCase()+g.name.slice(1)} </option>
-            ))
-            }
-            
+            <option value="all">All</option>
+            {genres?.map((g) => (
+              <option value={g.name} key={g.name}>
+                {g.name.charAt(0).toUpperCase() + g.name.slice(1)}{" "}
+              </option>
+            ))}
           </select>
+
+          <select
+            className={Style.button}
+            onChange={(e) => handleSortPlatforms(e)}
+          >
+            <option value="all">All</option>
+            {platforms?.map((g) => (
+              <option value={g} key={g}>
+                {g.charAt(0).toUpperCase() + g.slice(1)}
+              </option>
+            ))}
+          </select>
+
           <button className={Style.button}>
             <Link to={"/form/"}>Form</Link>
           </button>
@@ -116,7 +137,7 @@ export default function Home() {
       <div className={Style.divCard}>
         {currentGames.map((c) => {
           return (
-            <div>
+            <div key={c.id}>
               <Link to={"/home/" + c.id}>
                 <Card
                   name={c.name}

@@ -25,3 +25,7 @@ img {
 .containerText{
     margin-top: 20px;
 }
+
+.imgCard{
+    max-height: 250px;
+}

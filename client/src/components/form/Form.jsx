@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import {
   getAllGenres,
   createGame,
@@ -6,52 +7,16 @@ import {
 } from "../../redux/actions/index";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import Style from "../form/Form.module.css";
-// import { useNavigate } from "react-router-dom";
 
-function validate(game) {
-  let errors = {};
-
-  if (!game.name) {
-    errors.name = "Name is required!";
-  } else if (!/^[a-zA-Z0-9-() .]+$/.test(game.name)) {
-    errors.name = "Only accepts letters, numbers, mid dashes and parenthesis!";
-  }
-
-  if (
-    game.image.length !== 0 &&
-    !/^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/.test(game.image)
-  ) {
-    errors.image = "Invalid URL!";
-  }
-
-  if (!game.released) {
-    errors.released = "Released date is required!";
-  }
-
-  if (!game.description) {
-    errors.description = "Description is required!";
-  }
-
-  if (!game.rating) {
-    errors.rating = "Rating is required";
-  } else if (game.rating > 5) {
-    errors.rating = "Rating must be less than 5";
-  } else if (game.rating < 0) {
-    errors.rating = "Rating cannot be negative";
-  }
-
-  return errors;
-}
 
 export default function Form() {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const history = useHistory();
 
   const genres = useSelector((state) => state.genres);
   const allNames = useSelector((state) => state.allGames);
-  const platforms = useSelector((state) => state.platforms);
+  const platform = useSelector((state) => state.platforms);
 
   const [errorsForm, setErrorsForm] = useState({});
 
@@ -72,9 +37,41 @@ export default function Form() {
   useEffect(() => {
     dispatch(getAllGenres());
     dispatch(getAllGames());
-  }, []);
+  }, [dispatch]);
+
+  function validate(game) {
+    let errors = {};
+  
+    if (!game.name) {
+      errors.name = "Name is required!";
+    } else if (!/^[a-zA-Z0-9-() .]+$/.test(game.name)) {
+      errors.name = "Only accepts letters, numbers, mid dashes and parenthesis!";
+    }
+  
+    if (
+      game.image.length !== 0 &&
+      !/^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/.test(game.image)
+    ) {
+      errors.image = "Invalid URL!";
+    }
+  
+    if (!game.released) {
+      errors.released = "Released date is required!";
+    }
+  
+    if (!game.description) {
+      errors.description = "Description is required!";
+    }
+  
+    if (!game.rating) { errors.rating = "Rating is required"}
+    if (game.rating > 5) { errors.rating = "Rating must be less than 5"}
+    if (game.rating < 0) { errors.rating = "Rating cannot be negative"}
+  
+    return errors;
+  }
 
   function handleGenres(e) {
+    e.preventDefault();
     setGame({
       ...game,
       genres: [...new Set([...game.genres, e.target.value])],
@@ -82,13 +79,15 @@ export default function Form() {
   }
 
   const handleDeleteG = (g) => {
+    g.preventDefault();
     setGame({
       ...game,
-      genres: game.genres.filter((e) => e !== g),
+      genres: game.genres.filter((e) => e !== g.target.value),
     });
   };
 
   function handlePlatforms(e) {
+    e.preventDefault();
     setGame({
       ...game,
       platforms: game.platforms.includes(e.target.value)
@@ -129,9 +128,9 @@ export default function Form() {
         genres: [],
         platforms: [],
       });
-      alert("Videogame created successfully");
+      alert("Videogame created successfully")
     }
-    // navigate("/home");
+    history.push("/home");
   }
 
   function handleChange(e) {
@@ -146,9 +145,9 @@ export default function Form() {
   return (
     <div className={Style.all}>
       <div className={Style.cont}>
-        <form onSubmit={handleSubmit} className={Style.formCont}>
+        <form className={Style.formCont} onSubmit={handleSubmit}>
           <div className={Style.form}>
-            <label>Name</label>
+            <label className={Style.titulo}>Name</label>
             <input
               className={Style.input}
               type="text"
@@ -164,7 +163,7 @@ export default function Form() {
             ) : (
               false
             )}
-            <label>Description</label>
+            <label className={Style.titulo}>Description</label>
             <textarea
               name="description"
               placeholder="Enter a description..."
@@ -178,7 +177,7 @@ export default function Form() {
             ) : (
               false
             )}
-            <label>Released</label>
+            <label className={Style.titulo}>Released</label>
             <input
               className={Style.input}
               type="date"
@@ -194,7 +193,7 @@ export default function Form() {
             ) : (
               false
             )}
-            <label>Image</label>
+            <label className={Style.titulo}>Image</label>
             <input
               className={Style.input}
               type="text"
@@ -210,9 +209,10 @@ export default function Form() {
             ) : (
               false
             )}
-            <label>Rating</label>
+            <label className={Style.titulo}>Rating</label>
             <input
               className={Style.input}
+              type="number"
               name="rating"
               placeholder="Enter a rating 0 - 5"
               value={game.rating}
@@ -225,7 +225,7 @@ export default function Form() {
             ) : (
               false
             )}
-            <label>Genres</label>
+            <label className={Style.titulo}>Genres</label>
             <div>
               <select
                 id="genres"
@@ -242,24 +242,18 @@ export default function Form() {
                 })}
               </select>
               {game.genres.map((g) => (
-                <div>
-                  <label>{g}</label>
+                <div value={g}>
+                  <label value={g}>{g}</label>
                   <button onClick={(g) => handleDeleteG(g)} key={g} value={g}>
                     X
                   </button>
                 </div>
               ))}
             </div>
-            {/* <label>Genres</label>
-                        <select name="genres" value={game.genres} onChange={e => handleGenres(e)}>
-                            {genres.map((g) => (
-                                <option value={g.name}>{g.name}</option>
-                            ))}
-                        </select> */}
-            <label>Platforms</label>
+            <label className={Style.titulo}>Platforms</label>
             <div>
-              <select id="plataforms" onChange={(e) => handlePlatforms(e)}>
-                {platforms?.map((p) => {
+              <select id="plataforms" value={"plataforms"} onChange={(e) => handlePlatforms(e)}>
+                {platform?.map((p) => {
                   return (
                     <option value={p} key={p}>
                       {p}
@@ -268,8 +262,8 @@ export default function Form() {
                 })}
               </select>
               {game.platforms.map((p) => (
-                <div>
-                  <label>{p}</label>
+                <div value={p}>
+                  <label value={p}>{p}</label>
                   <button onClick={() => handleDeleteP(p)} key={p} value={p}>
                     X
                   </button>

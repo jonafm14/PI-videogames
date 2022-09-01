@@ -47,6 +47,7 @@ const getDbInfo = async () => { //info de la base de datos.
             rating: e.rating,
             platforms: e.platforms?.map((el) => el),
             createdInDb: e.createdInDb,
+            
         };
     });
     return mapInfoDb;

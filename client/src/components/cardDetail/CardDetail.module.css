@@ -6,16 +6,34 @@
 }
 .container{
     max-width: 1000px;
-    height: 800px;
+    height: 900px;
     background-color: white;
+    border: 5px solid black;
 }
+
 
 img{
     max-width: 300px;
 }
 
+.h4{
+  font-size: 20px;
+  margin-top: 10px;
+}
+
 h5{
     text-justify:auto;
+}
+
+.p{
+  margin-bottom: 20px;
+}
+
+.divButton{
+display: flex;
+justify-content: space-evenly;
+align-content: center;
+
 }
 
 .button {

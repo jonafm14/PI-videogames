@@ -5,6 +5,7 @@ import {
   GET_GAME_BY_NAME,
   GET_GAME_DETAILS,
   CREATE_GAME,
+  DELETE_VIDEOGAME
 } from "../actions";
 
 const initialState = {
@@ -25,7 +26,6 @@ function rootReducer(state = initialState, action) {
       action.payload.forEach(game => {
         platforms = [...platforms, ...game.platforms]
       });
-      // console.log(platforms)
       return {
         ...state,
         allGames: action.payload,
@@ -61,7 +61,7 @@ function rootReducer(state = initialState, action) {
       const filterCreated =
         action.payload === "created"
           ? allGamesCopy.filter((a) => a.createdInDb)
-          : allGamesCopy.filter((a) => !a.createdInDb);
+          : allGamesCopy.filter((a) => !a.createdInDb)
       return {
         ...state,
         allGames: action.payload === "All" ? state.allGamesCopy : filterCreated,
@@ -116,28 +116,6 @@ function rootReducer(state = initialState, action) {
         ...state,
         allGames: sort2,
       };
-    // case "FILTER_BY_GENRE":
-    //   const allGamesC = state.allGames;
-    //   const gamesByGenre = state.allGames;
-    //   const filteredGenre = gamesByGenre.filter((p) =>
-    //     p.genres.includes(action.payload)
-    //   );
-    //   console.log("allGamesCopy", allGamesC);
-    //   // action.payload === 'all' ?
-    //   //     gamesByGenre : gamesByGenre.filter((p)=> p.genres.includes(action.payload))
-    // return {
-    //   ...state,
-    //   allGames: action.payload === "All" ? allGamesC : filteredGenre,
-    // };
-
-    // case 'FILTER_BY_TYPE':
-    //   const pokemonsByType= state.filteredPokemons;
-    //   const filteredTypes = action.payload === 'all' ?
-    //       pokemonsByType : pokemonsByType.filter((p)=>p.types.includes(action.payload))
-    //   return{
-    //       ...state,
-    //       allPokemons: filteredTypes
-    //   }
     case "FILTER_BY_GENRE":
       const gamesByGenre = state.allGamesCopy;
       const filteredGenre = action.payload === "all" ?
@@ -146,6 +124,18 @@ function rootReducer(state = initialState, action) {
         ...state,
         allGames: filteredGenre,
       };
+      case DELETE_VIDEOGAME:
+			return {
+				...state,
+			};
+      case "FILTER_BY_PLATFORMS":
+        const gamesByPlatforms = state.allGamesCopy;
+        const filteredPlatforms = action.payload === "all"?
+          gamesByPlatforms : gamesByPlatforms.filter((g) => g.platforms.includes(action.payload))
+          return {
+            ...state,
+            allGames: filteredPlatforms,
+          }
     default:
       return state;
   }
