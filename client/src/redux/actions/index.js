@@ -7,7 +7,7 @@ export const CREATE_GAME = "CREATE_GAME";
 export const GET_GAME_DETAILS = "GET_GAME_DETAILS";
 export const DELETE_VIDEOGAME = "DELETE_VIDEOGAME";
 
-export function getAllGames() {
+export const getAllGames = () => {
   return async function (dispatch) {
     try {
       const json = await axios.get("http://localhost:3001/videogames");
@@ -20,19 +20,6 @@ export function getAllGames() {
     }
   };
 }
-
-// export const getAllGames = () => {
-//   return function(dispatch){
-//     axios.get("http://localhost:3001/videogames")
-//     .then((game) => {
-//       return dispatch ({
-//         type: "GET_ALL_GAMES",
-//          payload: game.data,
-//       })
-//     })
-//     .catch((error) => console.log(error))
-//   } 
-// }
 
 export const getGameById = (id) => {
   return async (dispatch) => {
@@ -47,19 +34,6 @@ export const getGameById = (id) => {
     }
   };
 };
-
-// export const getGameById = (id) => {
-//   return function (dispatch) {
-//     axios.get(`http://localhost:3001/videogames/${id}`)
-//     .then((game) =>{
-//       return dispatch({
-//         type: "GET_GAME_BY_ID",
-//          payload: game.data,
-//       })
-//     })
-//     .catch((error) =>console.log(error))
-//   }
-// }
 
 export const getGameByName = (name) => {
   return async (dispatch) => {
@@ -77,19 +51,6 @@ export const getGameByName = (name) => {
   };
 };
 
-// export const getGameByName = (name) => {
-//   return function(dispatch){
-//     axios.get(`http://localhost:3001/videogames?name=${name}`)
-//     .then((game) => {
-//       return dispatch({
-//         type: "GET_GAME_BY_NAME",
-//         payload: game.data,
-//       })
-//     })
-//     .catch((error) => console.log(error))
-//   }
-// }
-
 export const getAllGenres = () => {
   return async (dispatch) => {
     try {
@@ -103,19 +64,6 @@ export const getAllGenres = () => {
     }
   };
 };
-
-// export const getAllGenres = () => {
-//   return function(dispatch){
-//       axios.get("http://localhost:3001/genres")
-//       .then((gen) => {
-//         return dispatch({
-//           type: "GET_ALL_GENRES",
-//           payload: gen.data
-//         })
-//       })
-//       .catch((error) => console.log(error))
-//   }
-// }
 
 export const getGameDetails = (id) => {
   return async (dispatch) => {
@@ -131,19 +79,6 @@ export const getGameDetails = (id) => {
     }
   };
 };
-
-// export const getGameDetails = (id) => {
-//   return function (dispatch) {
-//     axios.get(`http://localhost:3001/videogames/${id}`)
-//     .then((game) => {
-//       return dispatch({
-//         type: "GET_GAME_DETAILS",
-//         payload: game.data,
-//       })
-//     })
-//     .catch((error) => console.log(error))
-//   }
-// }
 
 export const createGame = (payload) => {
   console.log("payload", payload)
@@ -163,19 +98,6 @@ export const createGame = (payload) => {
   };
 };
 
-// export const createGame = (payload) => {
-//   return function(dispatch) {
-//     axios.post(`http://localhost:3001/videogames`,payload)
-//     .then((create) => {
-//       return dispatch({
-//         type: "CREATE_GAME",
-//         payload: create.data,
-//       })
-//     })
-//     .catch((error) => console.log(error))
-//   }
-// }
-
 export const deleteVideogame = (id) => {
   return async (dispatch) => {
     try {
@@ -192,26 +114,12 @@ export const deleteVideogame = (id) => {
   };
 };
 
-// export const deleteVideogame = (id) => {
-//   return function(dispatch){
-//     axios.delete(`http://localhost:3001/videogames/${id}`)
-//     .then((game) => {
-//       return dispatch({
-//         type: DELETE_VIDEOGAME,
-//         payload: game.data,
-//       })
-//     })
-//     .catch((error) => console.log(error))
-//   }
-// }
-
 export function byPlatformsFilter(payload) {
   return {
       type: "FILTER_BY_PLATFORMS",
       payload
   }
 }
-
 
 export const createdFilter = (payload) => {
   return {

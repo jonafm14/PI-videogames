@@ -63,12 +63,20 @@ export default function Form() {
       errors.description = "Description is required!";
     }
   
-    if (!game.rating) { errors.rating = "Rating is required"}
-    if (game.rating > 5) { errors.rating = "Rating must be less than 5"}
-    if (game.rating < 0) { errors.rating = "Rating cannot be negative"}
+    if (!game.rating) { 
+      errors.rating = "Rating is required"
+    }
+    if (game.rating > 5) { 
+      errors.rating = "Rating must be less than 5"
+    }
+    if (game.rating < 0) { 
+      errors.rating = "Rating cannot be negative"
+    }
   
     return errors;
   }
+
+  console.log(errorsForm.name,errorsForm.image,errorsForm.description,errorsForm.rating)
 
   function handleGenres(e) {
     e.preventDefault();
@@ -105,7 +113,8 @@ export default function Form() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    !game.image
+      if(errorsForm.name===undefined && errorsForm.image===undefined && errorsForm.released===undefined && errorsForm.description===undefined && errorsForm.rating===undefined){
+        !game.image
       ? setGame({
           ...(game.image =
             "https://previews.123rf.com/images/mattbadal/mattbadal2012/mattbadal201200056/161901103-sin-vector-de-icono-de-imagen-no-hay-s%C3%ADmbolo-de-imagen-disponible-adecuado-para-el-elemento-de-inter.jpg?fj=1"),
@@ -131,6 +140,10 @@ export default function Form() {
       alert("Videogame created successfully")
     }
     history.push("/home");
+  }else{
+    alert("Check the inputs")
+    window.location.reload();
+  }   
   }
 
   function handleChange(e) {

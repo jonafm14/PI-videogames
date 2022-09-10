@@ -54,7 +54,7 @@ function Detail() {
           </Link>
           </div>
         </div>
-      ) : (<h1>El videojuego no existe</h1>)}
+      ) : null}
     </div>
   );
 }

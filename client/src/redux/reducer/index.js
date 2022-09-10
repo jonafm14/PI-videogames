@@ -56,6 +56,10 @@ function rootReducer(state = initialState, action) {
         ...state,
         genres: action.payload,
       };
+      case DELETE_VIDEOGAME:
+			return {
+				...state,
+			};
     case "FILTER_CREATED":
       const allGamesCopy = state.allGamesCopy;
       const filterCreated =
@@ -124,10 +128,6 @@ function rootReducer(state = initialState, action) {
         ...state,
         allGames: filteredGenre,
       };
-      case DELETE_VIDEOGAME:
-			return {
-				...state,
-			};
       case "FILTER_BY_PLATFORMS":
         const gamesByPlatforms = state.allGamesCopy;
         const filteredPlatforms = action.payload === "all"?
